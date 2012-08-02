@@ -3,16 +3,16 @@
 // We need to re-require/get connect/utils since we are not in express's scope anymore
 // As well as formidable
 // As well as qs
-var
-  utils = require('./node_modules/express/node_modules/connect').utils,
-  formidable = require('./node_modules/express/node_modules/connect/node_modules/formidable'),
-  qs = require('./node_modules/express/node_modules/connect/node_modules/qs');
+var utils = require('connect').utils
+  , formidable = require('formidable')
+  , qs = require('qs');
 
 exports = module.exports = function(options){
   options = options || {};
-  return function multipart(req, res, next) {
+  return function multipart (req, res, next) {
 
     if (req._body) return next();
+
     req.body = req.body || {};
     req.files = req.files || {};
 
@@ -31,9 +31,9 @@ exports = module.exports = function(options){
       , files = {}
       , done;
 
-    Object.keys(options).forEach(function(key){
+    for (var key in options) {
       form[key] = options[key];
-    });
+    }
 
     function ondata(name, val, data){
       if (Array.isArray(data[name])) {
@@ -75,16 +75,12 @@ exports = module.exports = function(options){
 
     // For each event, check if callback was passed and if so, add it to be triggered
     ['progress','field','fileBegin','file','error','aborted','end'].forEach(function(key){
-      
-      var
-        callback = 'on' + key;
-      
-      if( typeof options[callback] === 'function' ) {
-        
+
+      var callback = 'on' + key;
+
+      if (typeof options[callback] === 'function' ) {
         form.on(key, options[callback]);
-        
       }
-      
     });
 
     form.parse(req);
