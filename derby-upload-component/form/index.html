@@ -1,0 +1,18 @@
+<form: nonvoid>
+  <form class="{{{#if class}}}{{{class}}}{{{/}}}" x-as="form" method="{{{#if method}}}{{{method}}}{{{/}}}" enctype="{{{#if enctype}}}{{{enctype}}}{{{/}}}" action="{{{#if action}}}{{{action}}}{{{/}}}">
+    {{{content}}}
+  </form>
+
+<fileInput:>
+  <input class="{{{#if class}}}{{{class}}}{{{/}}}" x-as="fileinput" x-bind="change: _fileInputChange" data-uploadurl="{{{url}}}" name="{{{#if name}}}{{{name}}}{{{/}}}" type="file" multiple="multiple" />
+
+<dropArea: nonvoid>
+  <div class="{{{#if class}}}{{{class}}}{{{/}}}" x-bind="drop: _filesDropped" data-uploadurl="{{{url}}}">
+    {{{content}}}
+  </div>
+
+<fileList:>
+  {#each :self.files}
+    <!-- The progress tab is not wrapped by the if statement since it breaks the file scope -->
+    <div class="{{{#if class}}}{{{class}}}{{{/}}}">{.name}<progress class="{{{#if progress-class}}}{{{progress-class}}}{{{/}}}" value="{.progress}" max="100" style="{#if equal(.status,2)}display: none;{/}">{.progress}</progress></div>
+  {/}

@@ -1,0 +1,15 @@
+{
+  "name": "derby-upload-component",
+  "description": "A Derby upload component.",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/codeparty/derby-ui-boot.git"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "optionalDependencies": {},
+  "engines": {
+    "node": ">=0.6.0"
+  }
+}
