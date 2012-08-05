@@ -1,7 +1,4 @@
-var derby = require('derby')
-    // Require Express Utils lib for route parsing
-  , utils = require('express/lib/utils')
-    // And we also need parse for route parsing
+var utils = require('express/lib/utils')
   , parse = require('connect').utils.parseUrl
   , multipart = require('connect/lib/middleware/multipart')
   , fkstream = require('fkstream');
