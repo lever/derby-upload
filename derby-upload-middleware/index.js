@@ -3,8 +3,9 @@ var derby = require('derby')
   , utils = require('express/lib/utils')
     // And we also need parse for route parsing
   , parse = require('connect').utils.parseUrl
+  , multipart = require('connect/lib/middleware/multipart');
     // Require enhanced multipart
-  , multipart = require('./multipart');
+  //, multipart = require('./multipart');
 
 // A wrapper for the enhanced version of Connect's multipart middleware
 exports = module.exports = function(app, options){
@@ -22,43 +23,14 @@ exports = module.exports = function(app, options){
   return function derbyUploadMiddleware(req, res, next) {
 
     if( !utils.pathRegexp(path, [], false, false).test( parse(req).pathname ) ) {
-      multipart(options)(req, res, next);
+      multipart(options)(req, res, next); 
     } else {
-      var model = req.getModel()
-        , uploaded_files;
+      var model = req.getModel(),
+      unprocessed_files = [];
 
-      // Add event callbacks (but make them overridable)
-      options.onfileBegin = options.onfileBegin || function (name, file) {
-        uploaded_files = model.push(ns + '.files', {
-          name: name,
-          finished: false
-        });
+      model.set(ns + '.active_session', {});
 
-        console.log( 'onfileBegin' );
-      };
-
-      options.onprogress = options.onprogress || function ( bytesReceived, bytesExpected ) {
-        model.set(ns + '.files.' + uploaded_files + '.progress', {
-          progress: ( 100 * bytesReceived / bytesExpected ),
-          bytesReceived: bytesReceived,
-          bytesExpected: bytesExpected
-        });
-
-        console.log( 'onprogress: ' + bytesReceived + ' - ' + bytesExpected );
-      };
-
-      options.onfile = function (name, file) {
-        model.set(ns + '.files.' + uploaded_files + '.finished', true);
-
-        console.log( 'onfile' );
-      };
-
-      options.onend = function () {
-        console.log( 'onend' );
-      };
-
-      // TODO: Add more default callbacks and clean up above
-      // TODO: Better handling of multiple simultaneous uploads/files
+      var derby_upload_session = model.at(ns + '.active_session')
 
       // At last, after modifying options, create multipart middleware with new options and call it
       multipart(options)(req, res, next);
