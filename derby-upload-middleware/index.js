@@ -4,16 +4,13 @@ var derby = require('derby')
     // And we also need parse for route parsing
   , parse = require('connect').utils.parseUrl
   , multipart = require('connect/lib/middleware/multipart');
-    // Require enhanced multipart
-  //, multipart = require('./multipart');
 
 // A wrapper for the enhanced version of Connect's multipart middleware
 exports = module.exports = function(app, options){
 
   options = options || {};
 
-  var path = options.path || '*'
-    , ns = options.ns || '_derbyupload';
+  var path = options.path || '*';
 
   // Add a route handling the upload request in case it's not been caught to avoid 404 (by using Derby routes we allow for intervening routes)
   app.post(path, function(page, model, params, next) {
@@ -25,12 +22,7 @@ exports = module.exports = function(app, options){
     if( !utils.pathRegexp(path, [], false, false).test( parse(req).pathname ) ) {
       multipart(options)(req, res, next); 
     } else {
-      var model = req.getModel(),
-      unprocessed_files = [];
-
-      model.set(ns + '.active_session', {});
-
-      var derby_upload_session = model.at(ns + '.active_session')
+      
 
       // At last, after modifying options, create multipart middleware with new options and call it
       multipart(options)(req, res, next);
