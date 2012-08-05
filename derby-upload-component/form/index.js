@@ -58,8 +58,13 @@ function uploadNext() {
   xhr.upload.addEventListener('load', onload, false);
   xhr.addEventListener('readystatechange', onreadystatechange, false);
 
-  // Send file
+  // Open XHR
   xhr.open('POST', file.get('url') || this.action, true); // Use data attribute 'uploadurl' if available to make it possible to use form with other action
+
+  // Add file size (required for streaming straight to S3 without touching disk)
+  xhr.setRequestHeader("X-File-Size", file.get('file.size'));
+
+  // Send file
   xhr.send(formData);
 };
 
