@@ -1,5 +1,5 @@
  exports.create = function(model, dom) {
-  this.next_file_to_be_uploaded = 0;
+  this.nextFileToBeUploaded = 0;
   this.uploading = false;
   this.action = dom.element('form').getAttribute('action');
 };
@@ -16,8 +16,6 @@ exports._filesDropped = function(e, el, next) {
 };
 
 function addFilesToQueue(files, url) {
-  var files_length = files.length;
-
   for(var i = 0, file; file = files[i]; ++i) {
     this.files.push({
         name: file.name
@@ -40,7 +38,7 @@ function uploadNext() {
 
   var formData = new FormData()
     , xhr = new XMLHttpRequest
-    , file = this.active_file = this.files.at(this.next_file_to_be_uploaded);
+    , file = this.activeFile = this.files.at(this.nextFileToBeUploaded);
 
   if( !file.get('name') ) {
     this.uploading = false;
@@ -70,17 +68,17 @@ function uploadNext() {
 
 function onloadstart(e) {
   var self = this.self;
-  self.active_file.set('status', 1);
+  self.activeFile.set('status', 1);
 };
 
 function onprogress(e) {
   var self = this.self;
-  self.active_file.set('progress', 100*e.loaded/e.total);
+  self.activeFile.set('progress', 100*e.loaded/e.total);
 };
 
 function onload(e) {
   var self = this.self;
-  self.active_file.set('status', 2);
+  self.activeFile.set('status', 2);
 };
 
 function onreadystatechange(e) {
@@ -97,7 +95,7 @@ function onreadystatechange(e) {
 
   if(status === 200 && readyState === 4 && e.target.responseText) {
     // Process next in queue
-    self.next_file_to_be_uploaded++;
+    self.nextFileToBeUploaded++;
     uploadNext.call(self);
   }
 
