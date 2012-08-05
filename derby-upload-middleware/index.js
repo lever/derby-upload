@@ -35,7 +35,7 @@ exports = module.exports = function(app, options){
         // This also requires only one file to be uploaded per request
         if(options.derbyUpload.knox.stream && req.headers['x-file-size']) {
           // Streaming is done by modifying onPart using fkstream
-          options.onPart = fkstream((options.derbyUpload.knox.auth || {}), (options.derbyUpload.directory || ''), (options.derbyUpload.knox.headers || {}), options.derbyUpload.knox.callbacks);
+          options.onPart = fkstream((options.derbyUpload.knox.auth || {}), (options.derbyUpload.knox.directory || ''), (options.derbyUpload.knox.headers || {}), options.derbyUpload.knox.callbacks);
         } else {
           // Or after file has been successfully saved to disk
           // By modifying the callback after multipart/formidable successfully have processed the file(s)
