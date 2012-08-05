@@ -9,9 +9,7 @@
   "main": "index.js",
   "dependencies": {
     "express": "*",
-    "connect": "*",
-    "formidable": "*",
-    "qs": "*"
+    "connect": "*"
   },
   "engines": {
     "node": ">=0.6.0"
