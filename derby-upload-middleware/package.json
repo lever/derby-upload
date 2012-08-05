@@ -10,7 +10,8 @@
   "dependencies": {
     "express": "*",
     "connect": "*",
-    "fkstream": "*"
+    "fkstream": "*",
+    "knox": "*"
   },
   "engines": {
     "node": ">=0.6.0"
