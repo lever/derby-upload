@@ -1,6 +1,7 @@
 var pathRegexp = require('express/lib/utils').pathRegexp
-  , parse = require('connect').utils.parseUrl
-  , multipart = require('connect/lib/middleware/multipart')
+  , connect = require('connect')
+  , parse = connect.utils.parseUrl
+  , multipart = connect.multipart
   , fkstream = require('fkstream')
   , pathUtils = require('path')
   , knox = require('knox')
@@ -8,7 +9,7 @@ var pathRegexp = require('express/lib/utils').pathRegexp
   , fs = require('fs');
 
 // A wrapper for the enhanced version of Connect's multipart middleware
-exports = module.exports = function(app, options){
+exports = module.exports = function (app, options){
 
   options = options || {};
 
@@ -21,7 +22,7 @@ exports = module.exports = function(app, options){
     page._res.send(200);
   });
 
-  return function derbyUploadMiddleware(req, res, next) {
+  return function (req, res, next) {
     var re = pathRegexp(options.path, [], false, false)
       , path = parse(req).pathname;
 
