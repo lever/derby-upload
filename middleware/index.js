@@ -73,12 +73,12 @@ exports = module.exports = function (app, options){
 
         anyFilesStreamed = true;
 
-        client.putStream(fileReadStream, uploadPath, headers, function (err, res) {
+        client.putStream(fileReadStream, uploadPath, headers, function (err, knoxRes) {
           if (err) return originalNext(err);
 
-          var codeLeadingInt = parseInt(res.statusCode / 100, 10);
+          var codeLeadingInt = parseInt(knoxRes.statusCode / 100, 10);
           if (codeLeadingInt !== 2) {
-            return originalNext(new Error('' + res.statusCode));
+            return originalNext(new Error('' + knoxRes.statusCode));
           }
 
           // Destroy the stream reading the file and remove the file from tmp dir / file system
@@ -92,7 +92,7 @@ exports = module.exports = function (app, options){
 
           // Wait for streaming to complete before moving on, to ensure no
           // files are messed around with before they're streamed to AWS/S3
-          originalNext();
+          res.send(200);
         });
       }
 
