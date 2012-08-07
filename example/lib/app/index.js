@@ -7,7 +7,7 @@ var derby = require('derby')
 
 derby.use(require('../../ui'))
 
-derby.use(require('derby-upload-component'))
+derby.use(require('derby-upload/component'))
 
 
 // ROUTES //
@@ -31,6 +31,8 @@ get('/:roomName?', function(page, model, params) {
     model.set('_timer', '0.0')
     // Reset the counter when visiting a new route client-side
     start = +new Date()
+
+    model.set('_files', {list: []});
 
     // Render will use the model data as well as an optional context object
     page.render({

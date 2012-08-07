@@ -1,0 +1,21 @@
+{
+  "name": "derby-upload",
+  "description": "A Derby upload plugin (component & middleware)",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/lever/derby-upload.git"
+  },
+  "dependencies": {
+    "express": "*",
+    "connect": "*",
+    "fkstream": "*",
+    "knox": "*"
+  },
+  "devDependencies": {},
+  "optionalDependencies": {},
+  "engines": {
+    "node": ">=0.6.0"
+  },
+  "private": true
+}

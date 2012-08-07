@@ -1,0 +1,9 @@
+<!--
+<derbyupload:droparea files={_files}>
+  Drop Here
+</derbyupload:droparea>
+-->
+<droparea: nonvoid>
+  <div x-as=divdrop class="{{{#if class}}}{{{class}}}{{{/}}}" x-bind="drop: onFileDrop" data-uploadurl="{{{url}}}">
+    {{{content}}}
+  </div>

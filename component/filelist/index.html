@@ -1,0 +1,6 @@
+<!-- <derbyupload:filelist files={_files}> -->
+<fileList:>
+  {#each :self.files}
+    <!-- The progress tab is not wrapped by the if statement since it breaks the file scope -->
+    <div class="{{{#if class}}}{{{class}}}{{{/}}}">{.name}<progress class="{{{#if progress-class}}}{{{progress-class}}}{{{/}}}" value="{.progress}" max="100" style="{#if equal(.status,2)}display: none;{/}">{.progress}</progress></div>
+  {/}

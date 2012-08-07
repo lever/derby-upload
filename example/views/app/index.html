@@ -29,13 +29,23 @@
   <p>This page has been visted {_room.visits} times. <app:timer></p>
 
   <p>Let's go <a href="/{{randomUrl}}">somewhere random</a>.</p>
-  
+
   <h2>Upload form component style:</h2>
-  <derbyupload:form method="post" enctype="multipart/form-data" action="/testuploadfromform">
-    <derbyupload:fileList progress-class="test">
-    <derbyupload:dropArea url="/testupload">Droparea</derbyupload:dropArea>
-    <derbyupload:fileInput url="/testupload">
-  </derbyupload:form>
+  <form method=post enctype="multipart/form-data" action="/testuploadfromform">
+    <derbyupload:droparea url="/testupload" files={_files}>
+      Droparea
+    </derbyupload:droparea>
+    <derbyupload:fileinput url="/testupload" files={_files}>
+    {#each _files.list as :file}
+      <div>
+        {:file.name}
+        <progress class="test" value="{:file.progress}" max=100
+          style="{#if equal(:file.status,2)}display: none;{/}">
+          {:file.progress}
+        </progress>
+      </div>
+    {/}
+  </form>
 
 <timer:>
   {#if _stopped}

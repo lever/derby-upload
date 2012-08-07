@@ -5,7 +5,7 @@ var http = require('http')
   , derby = require('derby')
   , app = require('../app')
   , serverError = require('./serverError')
-  , derbyUploadMiddleware = require('derby-upload-middleware')
+  , derbyUploadMiddleware = require('derby-upload/middleware')
 
 
 // SERVER CONFIGURATION //
@@ -29,30 +29,28 @@ expressApp
 
   // Upload files straight to AWS/S3
   .use(derbyUploadMiddleware(app, {
-      derbyUpload: {
-          path: '/testupload*'
-        , knox: {
-              auth: {
-                  key: '<your_key>' // Required
-                , secret: '<your_secret>' // Required
-                , bucket: '<your_bucket>' // Required
-              }
-            , directory: '' // Optional. Folder, for example: '/my_img_folder'
-            , headers: { // Optional.
-                // Headers sent along to AWS, for example:
-                // 'x-amz-acl': 'private'
-              }
-            , callbacks: { // Optional.
-                // Available callbacks:
-                // putStream: function( err, res ) {}
-                // write: function( err, res ) {}
-                // pause: function( cb ) {}
-                // resume: function( cb ) {}
-                // end: function( cb ) {}
-              }
-            , stream: false // Optional. Use streaming straight to S3 without touching disk. Note! This can severly clog your memory
-          }
+    path: '/testupload*'
+  , knox: {
+      auth: {
+          key: '<your aws access key>' // Required
+        , secret: '<your aws secret>' // Required
+        , bucket: '<your s3 bucket>' // Required
       }
+    , directory: '' // Optional. Folder, for example: '/my_img_folder'
+    , headers: { // Optional.
+        // Headers sent along to AWS, for example:
+        // 'x-amz-acl': 'private'
+      }
+    , callbacks: { // Optional.
+        // Available callbacks:
+        // putStream: function( err, res ) {}
+        // write: function( err, res ) {}
+        // pause: function( cb ) {}
+        // resume: function( cb ) {}
+        // end: function( cb ) {}
+      }
+    , stream: false // Optional. Use streaming straight to S3 without touching disk. Note! This can severly clog your memory
+    }
   }))
 
   // Uncomment to add form data parsing support

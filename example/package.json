@@ -6,7 +6,8 @@
   "dependencies": {
     "derby": "git://github.com/codeparty/derby.git",
     "express": "3.0.0beta4",
-    "gzippo": ">=0.1.7"
+    "gzippo": ">=0.1.7",
+    "derby-upload": "*"
   },
   "private": true
 }
