@@ -68,9 +68,7 @@ exports = module.exports = function(app, options){
           , fileReadStream = fs.createReadStream(file.path)
           , uploadPath = pathUtils.join(((knoxOpts.directory || '') || ''), file.name);
 
-        console.log(uploadPath, uploadPath.replace(/ /g, '_'));
-
-        uploadPath = uploadPath.replace(/ /g, '_');
+        uploadPath = sanitizeFilename(uploadPath);
 
         anyFilesStreamed = true;
 
@@ -97,3 +95,7 @@ exports = module.exports = function(app, options){
     multipart(options)(req, res, next);
   }
 };
+
+function sanitizeFilename (filename) {
+  return filename.trim().replace(/\A.*(\\|\/)/g, '').replace(/[^\w\.\-]/g, '_');
+}
