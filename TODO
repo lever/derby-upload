@@ -1,2 +1,0 @@
-- Handle when an upload does not succeed; currently, it silently fails (e.g.,
-  if you set no knox auth, it seems to succeed)
