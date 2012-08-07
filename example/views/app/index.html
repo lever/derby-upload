@@ -22,18 +22,11 @@
   <ui:connectionAlert>
 
 <Body:>
-  <h1>{_room.welcome} ({_derbyupload.active_session.progress.progress})</h1>
-  <p><label>Welcome message: <input value="{_room.welcome}"></label></p>
-
-  <!-- Other templates are referenced like HTML elements -->
-  <p>This page has been visted {_room.visits} times. <app:timer></p>
-
-  <p>Let's go <a href="/{{randomUrl}}">somewhere random</a>.</p>
-
-  <h2>Upload form component style:</h2>
+  <h1>Derby Upload Demo</h1>
+  <h2 class=files>Files</h2>
   <form method=post enctype="multipart/form-data" action="/testuploadfromform">
     <derbyupload:droparea url="/testupload" files={_files}>
-      Droparea
+      <h2>Drop Your Files Here</h2>
     </derbyupload:droparea>
     <derbyupload:fileinput url="/testupload" files={_files}>
     {#each _files.list as :file}
