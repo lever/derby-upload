@@ -3,7 +3,7 @@
 var shared = require('../shared')
   , addFilesToQueue = shared.addFilesToQueue
   , setupUploadingFlag = shared.setupUploadingFlag
-  , shimClosest = shared.shimClosest;
+  , closestElem = shared.closestElem;
 
 exports.init = function (model) {
   var $files = this.files = model.at('files');
@@ -13,8 +13,7 @@ exports.init = function (model) {
 };
 
 exports.create = function (model, dom) {
-  shimClosest();
-  this.action = dom.element('fileinput').closest('form').getAttribute('action');
+  this.action = closestElem(dom.element('fileinput'), 'form').getAttribute('action');
 };
 
 /* x-bind callbacks */

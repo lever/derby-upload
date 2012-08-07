@@ -3,7 +3,7 @@
 var shared = require('../shared')
   , addFilesToQueue = shared.addFilesToQueue
   , setupUploadingFlag = shared.setupUploadingFlag
-  , shimClosest = shared.shimClosest;
+  , closestElem = shared.closestElem;
 
 exports.init = function (model, dom) {
   var $files = this.files = model.at('files');
@@ -12,10 +12,9 @@ exports.init = function (model, dom) {
 };
 
 exports.create = function (model, dom) {
-  shimClosest();
   setupUploadingFlag(this);
   var dropEl = dom.element('divdrop');
-  this.action = dropEl.closest('form').getAttribute('action');
+  this.action = closestElem(dropEl, 'form').getAttribute('action');
 };
 
 exports.addHoverClass = function (e, el, next) {

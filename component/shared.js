@@ -1,7 +1,7 @@
 module.exports = {
   addFilesToQueue: addFilesToQueue
 , setupUploadingFlag: setupUploadingFlag
-, shimClosest: shimClosest
+, closestElem: closestElem
 }
 
 function addFilesToQueue(component, files, url) {
@@ -116,12 +116,8 @@ function setupUploadingFlag (component) {
   }
 }
 
-function shimClosest () {
-  var proto = HTMLElement.prototype;
-  if (proto.closest) return;
-  proto.closest = function (selector) {
-    for (var x = this; x = x.parentElement; ) {
-      if (x.matches(selector)) return x;
-    }
+function closestElem (elem, selector) {
+  while (elem = elem.parentElement) {
+    if (elem.matches(selector)) return elem;
   }
 }
