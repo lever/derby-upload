@@ -30,8 +30,7 @@ function indexOf (array, predicate) {
 
 function uploadNext(component) {
   var formData = new FormData()
-    , xhr = new XMLHttpRequest
-    , file = component.activeFile = component.files.at(component.nextFileToBeUploaded);
+    , xhr = new XMLHttpRequest;
 
   var list = component.fileList.get();
   var index = indexOf(list, function (file) { return file.status === 0; });
