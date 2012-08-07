@@ -20,13 +20,13 @@ exports.create = function (model, dom) {
 exports.addHoverClass = function (e, el, next) {
   e.preventDefault();
   e.stopPropagation();
-  el.className = 'hover';
+  el.className = el.className + ' hover';
 };
 
 exports.removeHover = function (e, el, next) {
   e.preventDefault();
   e.stopPropagation();
-  el.className = '';
+  el.className = el.className.replace(' hover', '');
 };
 
 /* x-bind callbacks */
@@ -34,6 +34,6 @@ exports.onFileDrop = function(e, el, next) {
   e.preventDefault();
   e.stopPropagation();
 
-  el.className = '';
-  addFilesToQueue(this, e.dataTransfer.files, el.dataset['uploadurl'] );
+  el.className = el.className.replace(' hover', '');
+  addFilesToQueue(this, e.dataTransfer.files, el.dataset['uploadurl'] || this.action);
 };
