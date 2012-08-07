@@ -14,23 +14,27 @@ exports.init = function (model, dom) {
 exports.create = function (model, dom) {
   shimClosest();
   setupUploadingFlag(this);
-  this.action = dom.element('divdrop').closest('form').getAttribute('action');
-
-  // Setup document for dropping
-  var elem = document.documentElement;
-  dom.addListener(elem, 'dragenter', stop, false);
-  dom.addListener(elem, 'dragover', stop, false);
+  var dropEl = dom.element('divdrop');
+  this.action = dropEl.closest('form').getAttribute('action');
 };
 
-function stop (e) {
+exports.addHoverClass = function (e, el, next) {
   e.preventDefault();
   e.stopPropagation();
-}
+  el.className = 'hover';
+};
+
+exports.removeHover = function (e, el, next) {
+  e.preventDefault();
+  e.stopPropagation();
+  el.className = '';
+};
 
 /* x-bind callbacks */
 exports.onFileDrop = function(e, el, next) {
   e.preventDefault();
   e.stopPropagation();
 
+  el.className = '';
   addFilesToQueue(this, e.dataTransfer.files, el.dataset['uploadurl'] );
 };
