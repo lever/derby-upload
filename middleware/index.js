@@ -73,6 +73,13 @@ exports = module.exports = function(app, options){
         anyFilesStreamed = true;
 
         client.putStream(fileReadStream, uploadPath, headers, function (err, res) {
+          if (err) return originalNext(err);
+
+          var codeLeadingInt = parseInt(res.statusCode / 100, 10);
+          if (codeLeadingInt !== 2) {
+            return originalNext(new Error('' + res.statusCode));
+          }
+
           // Destroy the stream reading the file and remove the file from tmp dir / file system
           fileReadStream.destroy();
           fs.unlink(file.path);
