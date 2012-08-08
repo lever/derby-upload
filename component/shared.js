@@ -1,3 +1,6 @@
+var uuid = require('node-uuid')
+  , path = require('path');
+
 module.exports = {
   addFilesToQueue: addFilesToQueue
 , setupUploadingFlag: setupUploadingFlag
@@ -6,14 +9,19 @@ module.exports = {
 
 function addFilesToQueue(component, files, url) {
   for (var i = 0, l = files.length; i < l; i++) {
-    var file = files[i];
+    var file = files[i]
+      , filename = file.name
+      , ext = path.extname(filename)
+      , base = path.basename(filename, ext)
     component.fileList.push({
-      name: file.name
+      id: uuid.v4()
+    , name: base
+    , ext: ext
     , file: file
     // Status: {0: not started, 1: in progress, 2: finished}
     , status: 0
     , progress: 0
-    , url: url
+    , url: url // TODO No need to redundantly store url
     });
 
     // If we are not already processing files, process the next one in queue
@@ -39,7 +47,7 @@ function uploadNext(component) {
   var file = list[index];
   component.activeFile = component.fileList.at(index);
 
-  formData.append(file.name, file.file);
+  formData.append(file.id + file.ext, file.file);
 
   // Save this for use in XHR events
   xhr.component = xhr.upload.component = component;
@@ -75,6 +83,7 @@ function onprogress(e) {
 function onload(e) {
   var component = this.component;
   component.activeFile.set('status', 2);
+  component.activeFile.del('progress');
 };
 
 function onreadystatechange(e) {

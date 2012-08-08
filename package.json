@@ -10,7 +10,8 @@
     "express": "*",
     "connect": "*",
     "fkstream": "*",
-    "knox": "*"
+    "knox": "*",
+    "node-uuid": "*"
   },
   "devDependencies": {},
   "optionalDependencies": {},
