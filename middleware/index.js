@@ -115,6 +115,7 @@ exports = module.exports = function (options){
 
           // Wait for streaming to complete before moving on, to ensure no
           // files are messed around with before they're streamed to AWS/S3
+          // , as well as to make sure req.files is properly set
           originalNext();
         });
       }
