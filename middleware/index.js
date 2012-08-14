@@ -80,6 +80,10 @@ exports = module.exports = function (options){
         anyFilesStreamed = true;
 
         client.putStream(fileReadStream, uploadPath, headers, function (err, knoxRes) {
+          // Destroy the stream reading the file and remove the file from tmp dir / file system
+          fileReadStream.destroy();
+          fs.unlink(file.path);
+
           if (err) return originalNext(err);
 
           var statusCode = knoxRes.statusCode
@@ -88,11 +92,7 @@ exports = module.exports = function (options){
             return originalNext(new Error(http.STATUS_CODES[statusCode]));
           }
 
-          // Destroy the stream reading the file and remove the file from tmp dir / file system
-          fileReadStream.destroy();
-          fs.unlink(file.path);
-
-          if (options.callbacks.putStream) options.callbacks.putStream.apply(null, arguments);
+          if (options.callbacks.putStream) options.callbacks.putStream.apply(null, arguments); 
 
           // Emit the file
           var pair = key.split('.')
