@@ -11,7 +11,6 @@ var pathRegexp = require('express/lib/utils').pathRegexp
   , pathUtils = require('path')
   ;
 
-// A wrapper for the enhanced version of Connect's multipart middleware
 exports = module.exports = function (options){
 
   // Set options to empty objects to avoid undefined errors
