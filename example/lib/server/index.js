@@ -53,6 +53,7 @@ expressApp
   }
   , derbyApp: app // Optional. Defaults to nothing. Convenience option for attaching a Derby route returning 200 / OK (will be triggered in case no other handling get triggered)
   , stream: false // Optional. Use streaming straight to S3 without touching disk. Note! This can severly clog your memory
+  , removeTmp: true // Optional. Only matters when not streaming straight to S3 (when stream is set to false)
   }))
 
   // Uncomment to add form data parsing support

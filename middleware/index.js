@@ -80,9 +80,14 @@ exports = module.exports = function (options){
         anyFilesStreamed = true;
 
         client.putStream(fileReadStream, uploadPath, headers, function (err, knoxRes) {
-          // Destroy the stream reading the file and remove the file from tmp dir / file system
+          // Destroy the stream reading the file
           fileReadStream.destroy();
-          fs.unlink(file.path);
+
+          if (options.removeTmp) {
+            // Remove the file from tmp dir / file system and remove the path to the now non-existing file
+            fs.unlink(file.path);
+            delete file.path;
+          }
 
           if (err) return originalNext(err);
 
