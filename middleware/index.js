@@ -12,46 +12,43 @@ var pathRegexp = require('express/lib/utils').pathRegexp
   ;
 
 // A wrapper for the enhanced version of Connect's multipart middleware
-exports = module.exports = function (app, options){
+exports = module.exports = function (options){
 
+  // Set options to empty objects to avoid undefined errors
   options = options || {};
+  options.auth = options.auth || {};
+  options.headers = options.headers || {};
+  options.callbacks = options.callbacks || {};
+  options.formidable = options.formidable || {};
 
   // Set defaults
   options.path = options.path || '*';
+  options.directory = options.directory || '';
 
   // Add a route handling the upload request in case it's not been caught to
   // avoid 404 (by using Derby routes we allow for intervening routes)
-  app.post(options.path, function(page, model, params, next) {
-    page._res.send(200);
-  });
-
-
-  var knoxOpts = options.knox, client;
-  if (knoxOpts) {
-    client = knox.createClient(knoxOpts.auth);
+  if(options.derbyApp) {
+    options.derbyApp.post(options.path, function(page, model, params, next) {
+      page._res.send(200);
+    });
   }
+
+  var client = knox.createClient(options.auth);
 
   return function (req, res, next) {
     var re = pathRegexp(options.path, [], false, false)
       , path = parse(req).pathname;
 
     // If path doesn't match - use regular multipart
-    if(! re.test(path)) return multipart(options)(req, res, next);
+    if(! re.test(path)) return multipart(options.formidable)(req, res, next);
 
-    if (! knoxOpts) return multipart(options)(req, res, next);
-
-    // If knox is sent as parameters, then stream file to knox
-
-    // Set knox.callbacks as empty object as default
-    var callbacks = knoxOpts.callbacks = knoxOpts.callbacks || {}
-      , stream = knoxOpts.stream;
     // Either by streaming straight to S3 without touching disk. Be aware of possible memory clogging using this method
     // This requires x-file-size to be set as header on the request (and be valid).
     // This also requires only one file to be uploaded per request
-    if(stream && req.headers['x-file-size']) {
+    if(options.stream && req.headers['x-file-size']) {
       // Streaming is done by modifying onPart using fkstream
-      options.onPart = fkstream((knoxOpts.auth || {}), (knoxOpts.directory || ''), (knoxOpts.headers || {}), callbacks);
-      return multipart(options)(req, res, next);
+      options.formidable.onPart = fkstream(options.auth, options.directory, options.headers, options.callbacks);
+      return multipart(options.formidable)(req, res, next);
     }
 
     // Or after file has been successfully saved to disk
@@ -73,9 +70,9 @@ exports = module.exports = function (app, options){
                 'Content-Length': file.size
               , 'Content-Type': file.type
               }
-            , (knoxOpts.headers || {}) )
+            , options.headers)
           , fileReadStream = fs.createReadStream(file.path)
-          , uploadPath = pathUtils.join(knoxOpts.directory || '', key);
+          , uploadPath = pathUtils.join(options.directory, key);
 
         anyFilesStreamed = true;
 
@@ -92,7 +89,7 @@ exports = module.exports = function (app, options){
           fileReadStream.destroy();
           fs.unlink(file.path);
 
-          if (callbacks.putStream) callbacks.putStream.apply(null, arguments);
+          if (options.callbacks.putStream) options.callbacks.putStream.apply(null, arguments);
 
           // Emit the file
           var pair = key.split('.')
@@ -113,8 +110,8 @@ exports = module.exports = function (app, options){
       if(!anyFilesStreamed) originalNext();
     };
 
-    // At last, after modifying options (or the next callback), create multipart middleware with new options and call it
-    multipart(options)(req, res, next);
+    // At last, after modifying options.formidable (or the next callback), create multipart middleware with new options and call it
+    multipart(options.formidable)(req, res, next);
   }
 };
 
@@ -123,10 +120,8 @@ function sanitizeFilename (filename) {
 }
 
 exports.download = function (opts) {
-  var knoxOpts = opts.knox, client;
-  if (knoxOpts) {
-    client = knox.createClient(knoxOpts.auth);
-  }
+  var client = knox.createClient(opts.auth);
+
   return function (req, res, next) {
     var knoxReq = client.get(req.params.filename);
     knoxReq.on('error', next);
