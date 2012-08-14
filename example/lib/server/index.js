@@ -51,7 +51,7 @@ expressApp
   , formidable: { // Optional
       // Options passed to formidable through multipart
   }
-  , derbyApp: app // Optional. Defaults to nothing. Convenience option for attaching a Derby route returning 200 / OK (will be triggered in case no other Derby route handling get triggered but will get triggered before, and prevent, any server only / express routes)
+  , derbyApp: undefined // Optional. Use like this: `derbyApp: app`. Convenience option for attaching a Derby route returning 200 / OK (will be triggered in case no other Derby route handling get triggered but will get triggered before, and prevent, any server only / express routes)
   , stream: false // Optional. Use streaming straight to S3 without touching disk. Note! This can severly clog your memory
   , removeTmp: true // Optional. Only matters when not streaming straight to S3 (when stream is set to false)
   }))
@@ -78,6 +78,10 @@ expressApp
 
 
 // SERVER ONLY ROUTES //
+
+expressApp.post('/testupload*', function(req, res, next) {
+  res.json(req.files);
+})
 
 expressApp.all('*', function(req) {
   throw '404: ' + req.url
