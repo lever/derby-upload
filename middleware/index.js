@@ -39,8 +39,11 @@ exports = module.exports = function (options){
     var re = pathRegexp(options.path, [], false, false)
       , path = parse(req).pathname;
 
-    // If path doesn't match - use regular multipart
-    if(! re.test(path)) return multipart(options.formidable)(req, res, next);
+    // If path doesn't match then skip uploading to AWS/S3
+    if(! re.test(path)) {
+      next();
+      return;
+    }
 
     // Either by streaming straight to S3 without touching disk. Be aware of possible memory clogging using this method
     // This requires x-file-size to be set as header on the request (and be valid).
