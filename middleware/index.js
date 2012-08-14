@@ -23,7 +23,7 @@ exports = module.exports = function (options){
   // Set defaults
   options.path = options.path || '*';
   options.directory = options.directory || '';
-  options.removeTmp = options.removeTmp || true;
+  options.removeTmp = (typeof options.removeTmp !== 'undefined' ? options.removeTmp : true);
 
   // Add a route handling the upload request in case it's not been caught to
   // avoid 404 (by using Derby routes we allow for intervening routes)
