@@ -24,6 +24,7 @@ exports = module.exports = function (options){
   // Set defaults
   options.path = options.path || '*';
   options.directory = options.directory || '';
+  options.removeTmp = options.removeTmp || true;
 
   // Add a route handling the upload request in case it's not been caught to
   // avoid 404 (by using Derby routes we allow for intervening routes)
@@ -75,7 +76,7 @@ exports = module.exports = function (options){
               }
             , options.headers)
           , fileReadStream = fs.createReadStream(file.path)
-          , uploadPath = pathUtils.join(options.directory, key);
+          , uploadPath = pathUtils.join('/', options.directory, key);
 
         anyFilesStreamed = true;
 
@@ -99,19 +100,22 @@ exports = module.exports = function (options){
 
           if (options.callbacks.putStream) options.callbacks.putStream.apply(null, arguments); 
 
-          // Emit the file
+          // Add data to req.files, including the url to the file (both http and https urls)
           var pair = key.split('.')
             , id = pair[0], ext = '.' + pair[1];
-          res.emit('uploadSucceed', {
-            id: id
-          , name: pathUtils.basename(file.name, ext)
-          , ext: ext
-          , file: file
-          });
+          file = knoxUtils.merge(
+              file
+            , {
+                  http: client.http(uploadPath)
+                , https: client.https(uploadPath)
+                , id: id
+                , strippedName: pathUtils.basename(file.name, ext)
+                , ext: ext
+              });
 
           // Wait for streaming to complete before moving on, to ensure no
           // files are messed around with before they're streamed to AWS/S3
-          res.send(200);
+          originalNext();
         });
       }
 
