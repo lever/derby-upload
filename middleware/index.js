@@ -131,6 +131,9 @@ exports.download = function (opts) {
     var knoxReq = client.get(req.params.filename);
     knoxReq.on('error', next);
     knoxReq.on('response', function (knoxRes) {
+      ['cache-control', 'last-modified', 'etag'].forEach(function (x) {
+        res.setHeader(x, knoxRes.headers[x])
+      });
       knoxRes.on('error', next);
       knoxRes.pipe(res);
     });
