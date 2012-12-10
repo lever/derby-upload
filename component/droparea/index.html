@@ -1,11 +1,12 @@
 <!--
-<derbyupload:droparea files={_files}>
+<derbyupload:droparea files={_files} url={{_url}}>
   Drop Here
 </derbyupload:droparea>
 -->
 <droparea: nonvoid>
-  <div x-as=divdrop class="{{@class}}"
-       x-bind="drop: onFileDrop, dragenter: addHoverClass, dragend: removeHover, dragleave: removeHover"
-       data-uploadurl="{{@url}}">
-    {{@content}}
-  </div>
+  <form x-as=form class=uploads method=post enctype="multipart/form-data" action="{{@url}}">
+    <div x-as=dropzone class="dropzone"
+         x-bind="drop: drop, dragenter: enter, dragend: leave, dragleave: leave">
+      {{@content}}
+    </div>
+  </form>

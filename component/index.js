@@ -7,11 +7,12 @@ var config = {
 , scripts: {
     droparea: require('./droparea')
   , fileinput: require('./input')
-  , filelist: {}
   }
 };
 
-
-function plugin (derby, options) {
-  derby.createLibrary(config, options);
+function plugin(derby, options) {
+  var library = derby.createLibrary(config, options);
+  library.view.fn('uploading', function(file) {
+    return file && (file.status === 0 || file.status === 1);
+  });
 }

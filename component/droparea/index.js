@@ -1,39 +1,30 @@
-// dropArea
+module.exports = exports = require('../input');
 
-var shared = require('../shared')
-  , addFilesToQueue = shared.addFilesToQueue
-  , setupUploadingFlag = shared.setupUploadingFlag
-  , closestElem = shared.closestElem;
-
-exports.init = function (model, dom) {
-  var $files = this.files = model.at('files');
-  var $list = this.fileList = $files.at('list');
-  $list.setNull([]);
+exports.create = function(model, dom) {
+  // fileinput within a droparea should inherit options from its container
+  this.on('create:descendant', function(component, type) {
+    if (type !== 'lib:fileinput') return;
+    component.model.ref('url', model.at('url'));
+    component.model.ref('files', model.at('files'));
+    component.model.ref('remove-done', model.at('remove-done'));
+  });
 };
 
-exports.create = function (model, dom) {
-  setupUploadingFlag(this);
-  var dropEl = dom.element('divdrop');
-  this.action = closestElem(dropEl, 'form').getAttribute('action');
-};
-
-exports.addHoverClass = function (e, el, next) {
+exports.enter = function(e, el) {
+  console.log('enter')
   e.preventDefault();
   e.stopPropagation();
-  el.className = el.className + ' hover';
+  el.classList.add('hover');
 };
 
-exports.removeHover = function (e, el, next) {
+exports.leave = function(e, el) {
+  console.log('leave')
   e.preventDefault();
   e.stopPropagation();
-  el.className = el.className.replace(' hover', '');
+  el.classList.remove('hover');
 };
 
-/* x-bind callbacks */
-exports.onFileDrop = function(e, el, next) {
-  e.preventDefault();
-  e.stopPropagation();
-
-  el.className = el.className.replace(' hover', '');
-  addFilesToQueue(this, e.dataTransfer.files, el.dataset['uploadurl'] || this.action);
+exports.drop = function(e, el) {
+  this.leave(e, el);
+  this.addFilesToQueue(e.dataTransfer.files);
 };
