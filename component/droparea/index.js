@@ -11,14 +11,12 @@ exports.create = function(model, dom) {
 };
 
 exports.enter = function(e, el) {
-  console.log('enter')
   e.preventDefault();
   e.stopPropagation();
   el.classList.add('hover');
 };
 
 exports.leave = function(e, el) {
-  console.log('leave')
   e.preventDefault();
   e.stopPropagation();
   el.classList.remove('hover');
