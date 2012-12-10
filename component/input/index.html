@@ -1,8 +1,9 @@
 <!-- <derbyupload:fileinput files={_files}> -->
 <fileinput:>
-  <input class="{{{#if class}}}{{{class}}}{{{/}}}"
+  <input class="{{@class}}"
      x-as="fileinput"
      x-bind="change: onFileInputChange"
-     data-uploadurl="{{{url}}}"
-     name="{{{#if name}}}{{{name}}}{{{/}}}"
-     type=file multiple>
+     data-uploadurl="{{@url}}"
+     name="{{@name}}"
+     type=file
+     multiple>
