@@ -4,7 +4,7 @@
 </derbyupload:droparea>
 -->
 <droparea: nonvoid>
-  <div x-as=divdrop class="{{@class}}}"
+  <div x-as=divdrop class="{{@class}}"
        x-bind="drop: onFileDrop, dragenter: addHoverClass, dragend: removeHover, dragleave: removeHover"
        data-uploadurl="{{@url}}">
     {{@content}}
