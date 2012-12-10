@@ -6,7 +6,7 @@ var config = {
 , filename: __filename
 , scripts: {
     droparea: require('./droparea')
-  , fileinput: require('./input')
+  , fileinput: require('./fileinput')
   }
 };
 

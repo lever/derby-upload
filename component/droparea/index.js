@@ -1,4 +1,4 @@
-module.exports = exports = require('../input');
+module.exports = exports = require('../fileinput');
 
 exports.create = function(model, dom) {
   // fileinput within a droparea should inherit options from its container
