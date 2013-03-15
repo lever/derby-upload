@@ -19,6 +19,7 @@ exports = module.exports = function (options){
   options.headers = options.headers || {};
   options.callbacks = options.callbacks || {};
   options.formidable = options.formidable || {};
+  options.keyFn = options.keyFn || function(key) { return key; };
 
   // Set defaults
   options.path = options.path || '*';
@@ -66,6 +67,7 @@ exports = module.exports = function (options){
 
       for (var key in files) {
         key = sanitizeFilename(key);
+        var itemKey = options.keyFn(key);
         // key looks like "#{fileId}.#{fileExt}"
         var file = files[key]
           , headers = knoxUtils.merge(
@@ -75,7 +77,7 @@ exports = module.exports = function (options){
               }
             , options.headers)
           , fileReadStream = fs.createReadStream(file.path)
-          , uploadPath = pathUtils.join('/', options.directory, key);
+          , uploadPath = pathUtils.join('/', options.directory, itemKey);
 
         anyFilesStreamed = true;
 
@@ -100,7 +102,7 @@ exports = module.exports = function (options){
           if (options.callbacks.putStream) options.callbacks.putStream.apply(null, arguments); 
 
           // Add data to req.files, including the url to the file (both http and https urls)
-          var pair = key.split('.')
+          var pair = itemKey.split('.')
             , id = pair[0], ext = '.' + pair[1];
           file = knoxUtils.merge(
               file
