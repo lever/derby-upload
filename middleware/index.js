@@ -67,10 +67,10 @@ exports = module.exports = function (options){
 
       for (var key in files) {
         key = sanitizeFilename(key);
-        var itemKey = options.keyFn(key);
         // key looks like "#{fileId}.#{fileExt}"
-        var file = files[key]
-          , headers = knoxUtils.merge(
+        var file = files[key];
+        var itemKey = options.keyFn(key, file);
+        var headers = knoxUtils.merge(
               {
                 'Content-Length': file.size
               , 'Content-Type': file.type
