@@ -48,8 +48,9 @@ exports.uploadNext = function() {
   xhr.upload.addEventListener('load', onload, false);
   xhr.addEventListener('readystatechange', onreadystatechange, false);
 
+  var url = this.model.get('url');
   // Open XHR
-  xhr.open('POST', this.model.get('url'), true);
+  xhr.open('POST', url, true);
 
   // Add file size (required for streaming straight to S3 without touching disk)
   xhr.setRequestHeader("X-File-Size", file.file.size);
@@ -96,6 +97,9 @@ function onreadystatechange(e) {
   if (status === 200 && target.readyState === 4 && target.responseText) {
     if (this.component.model.get('remove-done')) {
       this.component.activeFile.remove();
+    }
+    if(this.component.model.get('responses')) {
+      this.component.model.push(this.response);
     }
     return this.component.uploadNext();
   }
