@@ -4,6 +4,7 @@ var uuid = require('node-uuid')
 exports.inputChange = function(e, el) {
   this.addFilesToQueue(el.files);
   el.value = null;
+  this.emit("submit", e, el)
 };
 
 exports.addFilesToQueue = function(files) {
