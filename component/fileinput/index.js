@@ -1,6 +1,9 @@
 var uuid = require('node-uuid')
   , path = require('path');
 
+exports.init = function(model) {
+  model.setNull('multiple', true)
+}
 exports.inputChange = function(e, el) {
   this.addFilesToQueue(el.files);
   el.value = null;
@@ -100,7 +103,10 @@ function onreadystatechange(e) {
       this.component.activeFile.remove();
     }
     if(this.component.model.get('responses')) {
-      this.component.model.push(this.response);
+      try {
+        var json = JSON.parse(this.response);
+        this.component.model.push('responses', json);
+      } catch (e) { }
     }
     return this.component.uploadNext();
   }
