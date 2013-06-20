@@ -112,5 +112,6 @@ function onreadystatechange(e) {
   }
   if (status !== 200) {
     this.component.model.set('error', true);
+    this.component.activeFile.set('status', -1);
   }
 }
