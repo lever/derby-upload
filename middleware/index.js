@@ -9,6 +9,7 @@ var pathRegexp = require('express/lib/utils').pathRegexp
   , fs = require('fs')
   , http = require('http')
   , pathUtils = require('path')
+  , async = require('async')
   ;
 
 exports = module.exports = function (options){
