@@ -11,7 +11,8 @@
     "connect": "*",
     "fkstream": "*",
     "knox": "*",
-    "node-uuid": "*"
+    "node-uuid": "*",
+    "async": "*"
   },
   "devDependencies": {},
   "optionalDependencies": {},
