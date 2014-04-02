@@ -36,6 +36,9 @@ exports = module.exports = function (options){
   }
 
   var client = knox.createClient(options.auth);
+  client.on("error", function(err) {
+    console.log("knox error", err, err.stack)
+  })
 
   return function (req, res, next) {
     var re = pathRegexp(options.path, [], false, false)
