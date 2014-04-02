@@ -36,9 +36,6 @@ exports = module.exports = function (options){
   }
 
   var client = knox.createClient(options.auth);
-  client.on("error", function(err) {
-    console.log("knox error", err, err.stack)
-  })
 
   return function (req, res, next) {
     var re = pathRegexp(options.path, [], false, false)
@@ -86,7 +83,7 @@ exports = module.exports = function (options){
 
         anyFilesStreamed = true;
 
-        client.putStream(fileReadStream, uploadPath, headers, function (err, knoxRes) {
+        var knoxReq = client.putStream(fileReadStream, uploadPath, headers, function (err, knoxRes) {
           // Destroy the stream reading the file
           fileReadStream.destroy();
 
@@ -124,6 +121,9 @@ exports = module.exports = function (options){
           // , as well as to make sure req.files is properly set
           fileCb(null, file);
         });
+        knoxReq.on("error", function(err) {
+          console.log("knox error", err, err.stack)
+        })
       }, function(err, results) {
          originalNext(err);
       });
