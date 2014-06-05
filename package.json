@@ -1,10 +1,13 @@
 {
-  "name": "derby-upload",
+  "name": "lever-upload",
   "description": "A Derby upload plugin (component & middleware)",
   "version": "1.0.0",
   "repository": {
     "type": "git",
     "url": "git://github.com/lever/derby-upload.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.lever.co/"
   },
   "dependencies": {
     "express": "^3.4.8",
