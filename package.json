@@ -6,9 +6,6 @@
     "type": "git",
     "url": "git://github.com/lever/derby-upload.git"
   },
-  "publishConfig": {
-    "registry": "https://npm.lever.co/"
-  },
   "dependencies": {
     "express": "^3.4.8",
     "connect": "^2.19.3",
